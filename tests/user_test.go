@@ -3,18 +3,28 @@ package tests
 import(
   . "todolistapi/models"
   "testing"
-  "appengine/aetest"
   . "github.com/smartystreets/goconvey/convey"
+  utils "todolistapi/utils"
 )
 
-func initializeContext() aetest.Context{
-  c, _ := aetest.NewContext(nil)
-  return c
+func TestUserListRequest(t *testing.T) {
+  c := utils.InitializeContext()
+  defer c.Close()
+
+  Convey("Given a list of users created", t, func(){
+    utils.PopulateUserList(c, 100)
+    Convey("When I get all the users created", func(){
+      users, _, _ := ListUsers(c)
+      Convey("Then the quantity of user should be equal to 5000", func(){
+        So(len(users), ShouldEqual, 100)
+      })
+    })
+  })
 }
 
 func TestUserCreation(t *testing.T){
 
-  c := initializeContext() 
+  c := utils.InitializeContext() 
   defer c.Close()
   Convey("Given a user is created", t, func(){
     user := User{ 0, "Carlos", "coneramu@gmail.com"}
@@ -30,7 +40,7 @@ func TestUserCreation(t *testing.T){
 }
 
 func TestUserDeletion(t *testing.T) {
-  c := initializeContext()
+  c := utils.InitializeContext()
   defer c.Close()
 
   Convey("Given a user is created", t, func(){
@@ -58,7 +68,7 @@ func TestUserDeletion(t *testing.T) {
 }
 
 func TestUserUpdation(t *testing.T){
-  c := initializeContext()
+  c := utils.InitializeContext()
   defer c.Close()
 
   Convey("Given a user is created", t, func(){

@@ -11,13 +11,27 @@ type User struct{
   Email string
 }
 
+type UserList struct{
+  Users []User
+}
+
 const USER_NAME = "User"
+const CATALOG_NAME = "Catalog"
+const SCHEMA = "Schema"
+
+func getParentKey(c appengine.Context, entityName string, schema string) *datastore.Key{
+  return datastore.NewKey(c, entityName, SCHEMA, 0, nil)
+}
+
+func setParentKey(c appengine.Context) *datastore.Key{
+  return getParentKey(c, CATALOG_NAME, USER_NAME)
+}
 
 func (this *User) key(c appengine.Context) *datastore.Key{
   if this.Id == 0 {
-    return datastore.NewIncompleteKey(c, USER_NAME, nil)
+    return datastore.NewIncompleteKey(c, USER_NAME, setParentKey(c))
   }
-  return datastore.NewKey(c, USER_NAME, "", this.Id, nil)
+  return datastore.NewKey(c, USER_NAME, "", this.Id, setParentKey(c))
 }
 
 func (this *User) Save(c appengine.Context) (*datastore.Key, error){
@@ -41,6 +55,14 @@ func (this *User) Delete(c appengine.Context) (error){
 }
 
 func DeleteUserByKeyId(id int64, c appengine.Context) error{
-  key := datastore.NewKey(c, USER_NAME, "", id, nil)
+  key := datastore.NewKey(c, USER_NAME, "", id, setParentKey(c))
   return datastore.Delete(c, key)
 }
+
+func ListUsers(c appengine.Context) ([]User, []*datastore.Key, error){
+  query := datastore.NewQuery(USER_NAME).Ancestor(setParentKey(c))
+  users := []User{}
+  keys, err := query.GetAll(c, &users)
+  return users, keys, err
+}
+
