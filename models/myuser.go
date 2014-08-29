@@ -61,7 +61,7 @@ func DeleteUserByKeyId(id int64, c appengine.Context) error{
 
 func ListUsers(c appengine.Context) ([]User, []*datastore.Key, error){
   query := datastore.NewQuery(USER_NAME).Ancestor(setParentKey(c))
-  users := []User{}
+  users := make([]User,0,100)
   keys, err := query.GetAll(c, &users)
   return users, keys, err
 }

@@ -15,6 +15,11 @@ func IndexUser(c appengine.Context) string{
   return string(jsonString)
 }
 
+func DoCreateUser(c appengine.Context, user *models.User) error{
+  _, err := user.Save(c)
+  return err
+}
+
 //func CreateUser(){
 
 //}

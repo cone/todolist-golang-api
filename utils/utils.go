@@ -3,11 +3,10 @@ package utils
 import(
   "appengine"
   "todolistapi/models"
-  "appengine/aetest"
 )
 
-func InitializeContext() aetest.Context{
-  c, _ := aetest.NewContext(nil)
+func InitializeContext() appengine.Context{
+  c := appengine.NewContext(nil)
   return c
 }
 
