@@ -27,6 +27,9 @@ func handleUsers(c appengine.Context, r *http.Request, w http.ResponseWriter){
   case "GET"  :
     jsonString := controllers.IndexUser(c)
     fmt.Fprintf(w, "%v", jsonString)
+  case "DELETE" :
+    //deleteUserHandler(w, r)
+    fmt.Fprintf(w, "%v", "DELETE")
   }
 }
 
@@ -40,6 +43,20 @@ func createHdlr(w http.ResponseWriter, r *http.Request){
   } else {
     fmt.Fprintf(w, "%s", "User created succesfuly")
   }
+}
+
+func deleteUserHandler(w http.ResponseWriter, r *http.Request ) {
+  c := appengine.NewContext(r)
+  user, _ := decodeUser(r.Body)
+  err := controllers.DeleteUser(c, user.Id)
+  message := "The user deletion was"
+  if err != nil {
+    fmt.Fprintf(w, "%s %s", message, "Unsuccessful")
+  }else{
+    fmt.Fprintf(w, "%s %s", message, "Successful")
+  }
+  //params := r.URL.Query()
+  //fmt.Fprintf(w, "%v", params)
 }
 
 func decodeUser(r io.ReadCloser)(*models.User, error){
