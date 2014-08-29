@@ -20,7 +20,7 @@ func DoCreateUser(c appengine.Context, user *models.User) error{
   return err
 }
 
-func DeleteUser(c appengine.Context, userId int64) error{
+func DeleteUser(c appengine.Context, userId string) error{
   return models.DeleteUserByKeyId(userId, c)
 }
 
