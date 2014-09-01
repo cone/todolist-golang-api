@@ -8,7 +8,7 @@ import(
 )
 
 func TestUserListRequest(t *testing.T) {
-  c := utils.InitializeContext()
+  c := utils.InitializeTestContext()
   defer c.Close()
 
   Convey("Given a list of users created", t, func(){
@@ -24,10 +24,10 @@ func TestUserListRequest(t *testing.T) {
 
 func TestUserCreation(t *testing.T){
 
-  c := utils.InitializeContext() 
+  c := utils.InitializeTestContext() 
   defer c.Close()
   Convey("Given a user is created", t, func(){
-    user := User{ 0, "Carlos", "coneramu@gmail.com"}
+    user := User{ "", "Carlos", "coneramu@gmail.com"}
     userKey, _ := user.Save(c)
     Convey("When the user it is retrieved", func(){
       userFromDB, _ := GetUser(c, userKey)
@@ -40,11 +40,11 @@ func TestUserCreation(t *testing.T){
 }
 
 func TestUserDeletion(t *testing.T) {
-  c := utils.InitializeContext()
+  c := utils.InitializeTestContext()
   defer c.Close()
 
   Convey("Given a user is created", t, func(){
-    user := User{ 0, "Carlos", "coneramu@gmail.com"}
+    user := User{ "", "Carlos", "coneramu@gmail.com"}
     userKey, _ := user.Save(c)
 
     Convey("When the user is deleted using the userKey", func(){
@@ -68,11 +68,11 @@ func TestUserDeletion(t *testing.T) {
 }
 
 func TestUserUpdation(t *testing.T){
-  c := utils.InitializeContext()
+  c := utils.InitializeTestContext()
   defer c.Close()
 
   Convey("Given a user is created", t, func(){
-    user := User{ 0, "Carlos", "coneramu@gmail.com"}
+    user := User{ "", "Carlos", "coneramu@gmail.com"}
     user.Save(c)
 
    Convey("When the user is updated", func(){

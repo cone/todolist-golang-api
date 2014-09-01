@@ -79,4 +79,3 @@ func ListUsers(c appengine.Context) ([]User, []*datastore.Key, error){
   }
   return users, keys, err
 }
-
